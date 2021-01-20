@@ -43,12 +43,12 @@ def train_val_dataset(dataset, val_split=0.25):
 def get_data():
     datagen_kwargs = dict(rescale=1. / 255)
     train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(**datagen_kwargs)
-     train_datagen.horizontal_flip = True
-     train_datagen.vertical_flip = True
-     train_datagen.width_shift_range = 0.2
-     train_datagen.height_shift_range = 0.2
-     train_datagen.zoom_range = [0.8, 1.2]
-     train_datagen.shear_range = 10
+    train_datagen.horizontal_flip = True
+    train_datagen.vertical_flip = True
+    train_datagen.width_shift_range = 0.2
+    train_datagen.height_shift_range = 0.2
+    train_datagen.zoom_range = [0.8, 1.2]
+    train_datagen.shear_range = 10
     train_generator = train_datagen.flow_from_directory(
         DATA_DIR,
         shuffle=True,
