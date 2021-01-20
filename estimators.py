@@ -24,7 +24,7 @@ class ShadowModelBundle(sklearn.base.BaseEstimator):
     MODEL_ID_FMT = "shadow_%d"
 
     def __init__(
-        self, model_fn, shadow_dataset_size, num_models=20, seed=42, serializer=None
+        self, model_fn, shadow_dataset_size, num_models=12, seed=42, serializer=None
     ):
         super().__init__()
         self.model_fn = model_fn
