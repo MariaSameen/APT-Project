@@ -8,8 +8,8 @@ import torchvision.transforms as transforms
 from torch.utils.data import Subset
 from mia.estimators import ShadowModelBundle, AttackModelBundle, prepare_attack_data
 
-DATA_DIR = '/home/la_belva/Downloads/apt_dataset/samples'
-TEST_DIR = '/home/la_belva/Downloads/apt_dataset/test'
+DATA_DIR = 'C:\\Users\\Maria Sameen\\Desktop\\apt_project\\apt_dataset\\samples'
+TEST_DIR = 'C:\\Users\\Maria Sameen\\Desktop\\apt_project\\apt_dataset\\test'
 NUM_CLASSES = 12
 WIDTH = 64
 HEIGHT = 64
