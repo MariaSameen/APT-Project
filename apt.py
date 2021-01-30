@@ -7,9 +7,12 @@ from tensorflow.keras import layers
 import torchvision.transforms as transforms
 from torch.utils.data import Subset
 from mia.estimators import ShadowModelBundle, AttackModelBundle, prepare_attack_data
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
 
 DATA_DIR = 'C:\\Users\\Maria Sameen\\Desktop\\apt_project\\apt_dataset\\samples'
 TEST_DIR = 'C:\\Users\\Maria Sameen\\Desktop\\apt_project\\apt_dataset\\test'
+
 NUM_CLASSES = 12
 WIDTH = 64
 HEIGHT = 64
@@ -22,9 +25,9 @@ num_shadows = 1
 
 FLAGS = flags.FLAGS
 flags.DEFINE_integer(
-    "target_epochs", 12, "Number of epochs to train target and shadow models."
+    "target_epochs", 15, "Number of epochs to train target and shadow models."
 )
-flags.DEFINE_integer("attack_epochs", 12, "Number of epochs to train attack models.")
+flags.DEFINE_integer("attack_epochs", 15, "Number of epochs to train attack models.")
 flags.DEFINE_integer("num_shadows", 3, "Number of epochs to train attack models.")
 
 transform = transforms.Compose(
@@ -111,45 +114,33 @@ def target_model_fn():
 
     The attack is white-box, hence the attacker is assumed to know this architecture too."""
 
-    model = tf.keras.models.Sequential()
+    model = Sequential()
 
-    model.add(
-        # layers.experimental.preprocessing.Rescaling(1. / 255),
-        layers.Conv2D(
-            32,
-            (3, 3),
-            activation="relu",
-            padding="same",
-            input_shape=(WIDTH, HEIGHT, CHANNELS),
-        )
-    )
-    model.add(layers.Conv2D(32, (3, 3), activation="relu"))
-    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(layers.Dropout(0.25))
+    model.add(Conv2D(50, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu', input_shape=(64, 64, 3)))
 
-    model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
-    model.add(layers.Conv2D(64, (3, 3), activation="relu"))
-    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(layers.Dropout(0.25))
+    # convolutional layer
+    model.add(Conv2D(75, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2)))
+    model.add(Dropout(0.3))
 
-    model.add(layers.Conv2D(64, (3, 3), activation="relu"))
-    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(layers.Dropout(0.25))
+    model.add(Conv2D(125, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2)))
+    model.add(Dropout(0.4))
 
-    model.add(layers.Conv2D(64, (3, 3), activation="relu"))
-    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(layers.Dropout(0.25))
+    # flatten output of conv
+    model.add(Flatten())
 
-    model.add(layers.Flatten())
+    # hidden layer
+    model.add(Dense(500, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(250, activation='relu'))
+    model.add(Dropout(0.6))
+    # output layer
+    model.add(Dense(12, activation='softmax'))
 
-    model.add(layers.Dense(1024, activation="relu"))
-    model.add(layers.Dropout(0.5))
-
-    model.add(layers.Dense(NUM_CLASSES, activation="softmax"))
-    model.compile("adam", loss="categorical_crossentropy", metrics=["accuracy"])
-
+    # compiling the sequential model
+    model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
     return model
-
 
 def attack_model_fn():
     """Attack model that takes target model predictions and predicts membership.
@@ -184,8 +175,7 @@ def demo(argv):
     print("Training the target model...")
     target_model = target_model_fn()
     target_model.fit(
-        X_train, y_train, epochs=FLAGS.target_epochs, validation_split=0.1, verbose=True
-    )
+        X_train, y_train, epochs=FLAGS.target_epochs, validation_split=0.1)
 
     # Train the shadow models.
     smb = ShadowModelBundle(
