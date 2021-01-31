@@ -12,7 +12,6 @@ from keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
 
 DATA_DIR = 'C:\\Users\\Maria Sameen\\Desktop\\apt_project\\apt_dataset\\samples'
 TEST_DIR = 'C:\\Users\\Maria Sameen\\Desktop\\apt_project\\apt_dataset\\test'
-
 NUM_CLASSES = 12
 WIDTH = 64
 HEIGHT = 64
@@ -121,20 +120,20 @@ def target_model_fn():
     # convolutional layer
     model.add(Conv2D(75, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'))
     model.add(MaxPool2D(pool_size=(2, 2)))
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.25))
 
     model.add(Conv2D(125, kernel_size=(3, 3), strides=(1, 1), padding='same', activation='relu'))
     model.add(MaxPool2D(pool_size=(2, 2)))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.3))
 
     # flatten output of conv
     model.add(Flatten())
 
     # hidden layer
     model.add(Dense(500, activation='relu'))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.4))
     model.add(Dense(250, activation='relu'))
-    model.add(Dropout(0.6))
+    model.add(Dropout(0.5))
     # output layer
     model.add(Dense(12, activation='softmax'))
 
@@ -175,7 +174,7 @@ def demo(argv):
     print("Training the target model...")
     target_model = target_model_fn()
     target_model.fit(
-        X_train, y_train, epochs=FLAGS.target_epochs, validation_split=0.1)
+        X_train, y_train, epochs=FLAGS.target_epochs)
 
     # Train the shadow models.
     smb = ShadowModelBundle(
