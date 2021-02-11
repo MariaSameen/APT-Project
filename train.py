@@ -25,7 +25,7 @@ parser.add_argument('--bs', type=int, default=32, help='training batch size') ##
 parser.add_argument('--input_size', type=int, default=(128, 128), help='input image size')
 parser.add_argument('--patch_size', type=int, default=(16, 16), help='input image size')
 parser.add_argument('--start_epoch', type=int, default=1, help='Starting epoch for continuing training')
-parser.add_argument('--nEpochs', type=int, default=10, help='number of epochs to train for')
+parser.add_argument('--nEpochs', type=int, default=9, help='number of epochs to train for')
 parser.add_argument('--lr', type=float, default=0.0001, help='Learning Rate. Default=0.0001')
 parser.add_argument('--gpu_mode', type=bool, default=True)
 parser.add_argument('--threads', type=int, default=1, help='number of threads for data loader to use')
