@@ -30,7 +30,7 @@ parser.add_argument('--gpus', default=1, type=int, help='number of gpu')
 parser.add_argument('--test_data_path', type=str, default='C:\\Users\\Maria Sameen\\Desktop\\apt_project\\task_2\\test\\')
 parser.add_argument('--model_type', type=str, default='convlstm')
 parser.add_argument('--pretrained_sr',
-                    default='C:\\Users\\Maria Sameen\\Desktop\\apt_project\\task_2\\Maria_Lstm\\Maria_Lstm\\checkpoints\\version_1\\MariaSameen-PC_convlstm_version_1_bs_32_epoch_009_step_000163.pth',
+                    default='C:\\Users\\Maria Sameen\\Desktop\\apt_project\\task_2\\Maria_Lstm\\Maria_Lstm\\checkpoints\\version_1\\MariaSameen-PC_convlstm_version_1_bs_32_epoch_010_step_000163.pth',
                     help='pretrained base model')  ### Pretrained model path
 parser.add_argument('--pretrained', type=bool, default=True)
 
